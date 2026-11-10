@@ -104,7 +104,9 @@ set(KIRTON_RUNTIME_LIBRARY_PATH "$<TARGET_FILE:kirton_core>" CACHE STRING
   "Build-tree fallback path for the static Runtime used by Native compilation")
 if (WIN32)
   if (MSVC)
-    set(KIRTON_NATIVE_RUNTIME_LINK_FLAGS "-Wl,/STACK:8388608 -lwinhttp -luser32 -lgdi32 -lwinmm -lopengl32 -ld3d11 -ldxgi -ld3dcompiler -lwindowscodecs -lole32 -ldxguid")
+    set_property(TARGET kirton_core PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>DLL")
+    # Clang 20's Windows driver can add libcmt even when /MD is selected.
+    set(KIRTON_NATIVE_RUNTIME_LINK_FLAGS "-fms-runtime-lib=$<IF:$<CONFIG:Debug>,dll_dbg,dll> -Wl,/NODEFAULTLIB:libcmt -Wl,/NODEFAULTLIB:libcmtd -Wl,/NODEFAULTLIB:libucrt -Wl,/NODEFAULTLIB:libucrtd -Wl,/STACK:8388608 -lwinhttp -luser32 -lgdi32 -lwinmm -lopengl32 -ld3d11 -ldxgi -ld3dcompiler -lwindowscodecs -lole32 -ldxguid")
   else()
     set(KIRTON_NATIVE_RUNTIME_LINK_FLAGS "-lwinhttp -luser32 -lgdi32 -lwinmm -lopengl32 -ld3d11 -ldxgi -ld3dcompiler -lwindowscodecs -lole32 -ldxguid")
   endif()
