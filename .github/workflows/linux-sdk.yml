@@ -1,0 +1,46 @@
+name: Linux SDK 1.3.0
+
+on:
+  push:
+    branches: [codex/linux-sdk-e191d6b]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linux-sdk:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - name: Checkout workflow
+        uses: actions/checkout@v7
+
+      - name: Checkout exact release source
+        uses: actions/checkout@v7
+        with:
+          ref: e191d6b7a816be5f49624c80a63baa3c188db730
+          path: source
+
+      - name: Install build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends build-essential cmake clang file binutils
+
+      - name: Build, test, package and verify SDK
+        run: bash .github/scripts/linux-sdk-release.sh
+
+      - name: Upload verified SDK and checksums
+        id: upload
+        uses: actions/upload-artifact@v7
+        with:
+          name: Kirton-SDK-1.3.0-linux-x86_64-e191d6b
+          path: |
+            ${{ runner.temp }}/kirton-release/dist/Kirton-SDK-1.3.0-linux-x86_64.tar.gz
+            ${{ runner.temp }}/kirton-release/dist/SHA256SUMS
+            ${{ runner.temp }}/kirton-release/dist/SOURCE_COMMIT
+          if-no-files-found: error
+          compression-level: 0
+
+      - name: Report artifact URL
+        run: echo 'Artifact: ${{ steps.upload.outputs.artifact-url }}' >> "$GITHUB_STEP_SUMMARY"
