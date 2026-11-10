@@ -1,0 +1,71 @@
+импорт "math3d"
+
+пусть ВВЕРХ_МИР = math3d.vec3(0.0, 1.0, 0.0)
+пусть _пи = 3.1415926535
+
+функция создать_камеру_от_первого_лица(позиция, yaw, pitch, fov_y, aspect, znear, zfar) {
+    возврат { позиция: позиция, yaw: yaw, pitch: pitch, fov_y: fov_y, aspect: aspect, znear: znear, zfar: zfar }
+}
+
+функция _ориентация(камера) {
+    пусть cy = кос(камера.yaw)
+    пусть sy = син(камера.yaw)
+    пусть cp = кос(камера.pitch)
+    пусть sp = син(камера.pitch)
+
+    // D3D11 LH: вперёд по +Z при yaw=0, pitch=0
+    пусть forward = math3d.vec3(sy * cp, sp, cp * cy)
+
+    // базис: right = up × forward, up = forward × right
+    пусть right = math3d.vec3_normalize(math3d.vec3_cross(ВВЕРХ_МИР, forward))
+    пусть up = math3d.vec3_cross(forward, right)
+
+    возврат [forward, right, up]
+}
+
+функция камера_матрица_вида(камера) {
+    пусть ориентация = _ориентация(камера)
+    пусть forward = ориентация[0]
+    пусть up = ориентация[2]
+
+    пусть target = math3d.vec3_add(камера.позиция, forward)
+    возврат math3d.mat4_look_at(камера.позиция, target, up)
+}
+
+функция камера_матрица_проекции(камера) {
+    возврат math3d.mat4_perspective(камера.fov_y, камера.aspect, камера.znear, камера.zfar)
+}
+
+функция камера_матрица_vp(камера) {
+    пусть p = камера_матрица_проекции(камера)
+    пусть v = камера_матрица_вида(камера)
+    возврат math3d.mat4_mul(p, v)   // P * V, под mul(u_mvp, float4(pos,1))
+}
+
+функция камера_переместить_local(камера, вперёд, вправо, вверх_движ) {
+    пусть ориентация = _ориентация(камера)
+    пусть forward = ориентация[0]
+    пусть right = ориентация[1]
+    пусть up = ориентация[2]
+
+    камера.позиция = math3d.vec3_add(камера.позиция, math3d.vec3_scale(forward, вперёд))
+    камера.позиция = math3d.vec3_add(камера.позиция, math3d.vec3_scale(right, вправо))
+    камера.позиция = math3d.vec3_add(камера.позиция, math3d.vec3_scale(up, вверх_движ))
+    возврат камера
+}
+
+функция камера_переместить_world(камера, dx, dy, dz) {
+    пусть delta = math3d.vec3(dx, dy, dz)
+    камера.позиция = math3d.vec3_add(камера.позиция, delta)
+    возврат камера
+}
+
+функция камера_повернуть(камера, delta_yaw, delta_pitch) {
+    камера.yaw = камера.yaw + delta_yaw
+    камера.pitch = камера.pitch + delta_pitch
+
+    // ограничиваем pitch, чтобы не переворачивало
+    камера.pitch = ограничить(камера.pitch, -0.49 * _пи, 0.49 * _пи)
+
+    возврат камера
+}

@@ -1,0 +1,2 @@
+импорт "native_compiler_module_cycle_a"
+функция б() { вернуть 2 }

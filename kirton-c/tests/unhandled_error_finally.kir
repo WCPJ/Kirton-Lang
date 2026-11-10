@@ -1,0 +1,6 @@
+попробовать
+    пусть значение = 1 нацело 0
+всегда
+    печатать("UNHANDLED_ALWAYS_RAN")
+конец
+печатать("UNHANDLED_ALWAYS_FAIL_AFTER")

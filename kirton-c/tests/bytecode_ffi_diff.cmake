@@ -1,0 +1,15 @@
+execute_process(COMMAND "${KIRTON}" --allow-ffi "${SOURCE}"
+  RESULT_VARIABLE ast_rc OUTPUT_VARIABLE ast_out ERROR_VARIABLE ast_err ENCODING UTF-8)
+execute_process(COMMAND "${KIRTON}" --bytecode --allow-ffi "${SOURCE}"
+  RESULT_VARIABLE bytecode_rc OUTPUT_VARIABLE bytecode_out ERROR_VARIABLE bytecode_err ENCODING UTF-8)
+if(NOT ast_rc EQUAL 0 OR NOT bytecode_rc EQUAL 0)
+  message(FATAL_ERROR "AST rc=${ast_rc}; Bytecode rc=${bytecode_rc}; AST stderr=${ast_err}; Bytecode stderr=${bytecode_err}")
+endif()
+if(NOT ast_out STREQUAL bytecode_out OR NOT ast_err STREQUAL bytecode_err)
+  message(FATAL_ERROR "AST and Bytecode FFI behavior differs. AST stdout=[${ast_out}] stderr=[${ast_err}] Bytecode stdout=[${bytecode_out}] stderr=[${bytecode_err}]")
+endif()
+if(SOURCE MATCHES "ffi_invalid")
+  if(NOT ast_out MATCHES "FFI_INVALID_CAUGHT" OR ast_out MATCHES "FFI_INVALID_NOT_REJECTED")
+    message(FATAL_ERROR "Invalid FFI argument was not rejected by both engines: ${ast_out}")
+  endif()
+endif()

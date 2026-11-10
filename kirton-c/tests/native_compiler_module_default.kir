@@ -1,0 +1,2 @@
+импорт "native_compiler_module_state"
+печатать(состояние.следующий())

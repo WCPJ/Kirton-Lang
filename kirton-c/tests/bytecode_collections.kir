@@ -1,0 +1,13 @@
+функция main() {
+  пусть items = [1, {"name": "before"}]
+  пусть data = {"items": items, "count": 0}
+  data["items"][1]["name"] = "after"
+  items[0] = items[0] + 4
+  data["count"] = data["count"] + 1
+  пусть cycle = {"self": пусто, "value": 42}
+  cycle["self"] = cycle
+  пусть cycle2 = {"self": пусто, "value": 42}
+  cycle2["self"] = cycle2
+  печатать(items[0], data["items"][1]["name"], data["count"])
+  печатать(cycle["self"]["value"], data["missing"], cycle == cycle2)
+}

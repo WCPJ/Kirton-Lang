@@ -1,0 +1,12 @@
+if(NOT DEFINED KIRTON OR NOT DEFINED SOURCE OR NOT DEFINED EXPECT)
+  message(FATAL_ERROR "KIRTON, SOURCE and EXPECT are required")
+endif()
+set(ir "${CMAKE_CURRENT_BINARY_DIR}/rejected.ll")
+execute_process(COMMAND "${KIRTON}" --emit-llvm "${SOURCE}" -o "${ir}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error)
+if(result EQUAL 0)
+  message(FATAL_ERROR "unsupported source was accepted")
+endif()
+if(NOT "${error}" MATCHES "${EXPECT}")
+  message(FATAL_ERROR "diagnostic [${error}] did not match [${EXPECT}]")
+endif()

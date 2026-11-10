@@ -1,0 +1,12 @@
+функция main() {
+  пусть values = [1, 2, 3, 4, 5]
+  пусть i = 0
+  пусть total = 0
+  пока i < 6000 {
+    для каждого value в values {
+      total = total + value
+    }
+    i = i + 1
+  }
+  печатать(total)
+}

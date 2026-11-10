@@ -1,0 +1,8 @@
+execute_process(COMMAND "${KIRTON}" -e main "${SOURCE}" RESULT_VARIABLE ast_rc OUTPUT_VARIABLE ast_out ERROR_VARIABLE ast_err)
+execute_process(COMMAND "${KIRTON}" --bytecode -e main "${SOURCE}" RESULT_VARIABLE bc_rc OUTPUT_VARIABLE bc_out ERROR_VARIABLE bc_err)
+if(ast_rc EQUAL 0 OR bc_rc EQUAL 0 OR NOT ast_out STREQUAL bc_out)
+  message(FATAL_ERROR "List-index errors differ (AST rc=${ast_rc}, bytecode rc=${bc_rc}, AST output=${ast_out}, bytecode output=${bc_out})")
+endif()
+if(NOT ast_err MATCHES "диапазона" OR NOT bc_err MATCHES "диапазона")
+  message(FATAL_ERROR "Both modes must report the list range error (AST=${ast_err}, bytecode=${bc_err})")
+endif()

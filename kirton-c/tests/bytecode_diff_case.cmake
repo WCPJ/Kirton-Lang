@@ -1,0 +1,5 @@
+execute_process(COMMAND "${KIRTON}" -e main "${SOURCE}" RESULT_VARIABLE ast_rc OUTPUT_VARIABLE ast_out ERROR_VARIABLE ast_err)
+execute_process(COMMAND "${KIRTON}" --bytecode -e main "${SOURCE}" RESULT_VARIABLE bc_rc OUTPUT_VARIABLE bc_out ERROR_VARIABLE bc_err)
+if(NOT ast_rc EQUAL bc_rc OR NOT ast_out STREQUAL bc_out)
+  message(FATAL_ERROR "AST/bytecode differ (AST rc=${ast_rc}, out=${ast_out}, err=${ast_err}; bytecode rc=${bc_rc}, out=${bc_out}, err=${bc_err})")
+endif()

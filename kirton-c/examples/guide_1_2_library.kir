@@ -1,0 +1,2 @@
+импорт "examples.lib.greetings"
+печатать(greetings.greet("Mira"))

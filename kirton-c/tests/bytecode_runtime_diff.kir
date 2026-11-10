@@ -1,0 +1,27 @@
+функция main()
+    если тип(1) == "целое" и тип(пусто) == "пусто" то
+        печатать("RUNTIME_TYPE_OK")
+    иначе
+        печатать("RUNTIME_TYPE_FAIL")
+    конец
+
+    если переменная("PATH") != "" и переменная(42) == "" то
+        печатать("RUNTIME_ENV_OK")
+    иначе
+        печатать("RUNTIME_ENV_FAIL")
+    конец
+
+    пусть args = аргументы()
+    если список_длина(args) >= 2 и progname() != "" и scriptname() != "" то
+        печатать("RUNTIME_ARGS_OK")
+    иначе
+        печатать("RUNTIME_ARGS_FAIL")
+    конец
+
+    пусть ошибка = ошибка("runtime test")
+    если ошибка.ок == ложь и ошибка.ошибка == "runtime test" то
+        печатать("RUNTIME_ERROR_VALUE_OK")
+    иначе
+        печатать("RUNTIME_ERROR_VALUE_FAIL")
+    конец
+конец

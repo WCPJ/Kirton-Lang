@@ -1,0 +1,7 @@
+печатать("TOP_LEVEL_BEFORE_RETURN")
+возврат 123
+печатать("TOP_LEVEL_AFTER_RETURN")
+
+функция main()
+    печатать("ENTRY_AFTER_TOP_LEVEL_RETURN")
+конец

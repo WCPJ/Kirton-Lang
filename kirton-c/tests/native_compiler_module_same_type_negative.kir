@@ -1,0 +1,5 @@
+импорт "native_compiler_module_same_type_a" как А
+импорт "native_compiler_module_same_type_b" как Б
+пусть чужой = Б.данные(42)
+пусть ошибка = А.обернуть(чужой)
+печатать("SHOULD_NOT_PRINT")

@@ -1,0 +1,35 @@
+// Simple OpenGL 1.1 demo using gl.*
+пусть ширина = 800
+пусть высота = 600
+
+если gl.create_window(ширина, высота, "GL demo") == ложь {
+    печатать("Failed to create OpenGL window")
+    возврат
+}
+
+пусть угол = 0.0
+
+пока gl.poll() {
+    gl.clear(0.05, 0.05, 0.08, 1.0)
+
+    gl.matrix_projection()
+    gl.perspective(70.0, ширина / высота, 0.1, 100.0)
+
+    gl.matrix_modelview()
+    gl.load_identity()
+    gl.translate(0.0, 0.0, -3.5)
+    gl.rotate_deg(угол, 0.0, 1.0, 0.0)
+
+    gl.begin(gl.mode_triangles())
+        gl.color3(1.0, 0.1, 0.1, 1.0)
+        gl.vertex3(0.0, 1.0, 0.0)
+        gl.color3(0.1, 1.0, 0.1, 1.0)
+        gl.vertex3(-1.0, -1.0, 0.0)
+        gl.color3(0.1, 0.4, 1.0, 1.0)
+        gl.vertex3(1.0, -1.0, 0.0)
+    gl.end()
+
+    gl.swap()
+
+    угол = угол + 1.0
+}

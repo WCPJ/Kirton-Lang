@@ -1,0 +1,9 @@
+функция sum(n) {
+    пусть answer = 0
+    пока n > 0 {
+        answer = answer + n
+        n = n - 1
+    }
+    вернуть answer
+}
+печатать(sum(4), sum(9), sum(0))

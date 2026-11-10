@@ -1,0 +1,18 @@
+функция counter() {
+  пусть value = 0
+  функция next() {
+    value = value + 1
+    вернуть value
+  }
+  вернуть next
+}
+функция main() {
+  пусть next = counter()
+  пусть i = 0
+  пусть total = 0
+  пока i < 12000 {
+    total = next()
+    i = i + 1
+  }
+  печатать(total)
+}

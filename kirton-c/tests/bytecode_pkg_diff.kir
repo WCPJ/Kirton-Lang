@@ -1,0 +1,15 @@
+импорт pkg
+
+функция main()
+    если pkg.пакеты_установить("fixture-only") == ложь и pkg.пакеты_удалить("fixture-only") == ложь то
+        печатать("PKG_ACTION_DENIED_BY_PLATFORM_OK")
+    иначе
+        печатать("PKG_ACTION_DENIED_BY_PLATFORM_FAIL")
+    конец
+
+    если список_длина(pkg.пакеты_поиск("fixture-only")) == 0 и список_длина(pkg.пакеты_поиск(42)) == 0 то
+        печатать("PKG_SEARCH_STUB_OK")
+    иначе
+        печатать("PKG_SEARCH_STUB_FAIL")
+    конец
+конец

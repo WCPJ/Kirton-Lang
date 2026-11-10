@@ -1,0 +1,9 @@
+импорт "math3d"
+
+пусть a = math3d.vec3(1.0, 2.0, 3.0)
+пусть b = math3d.vec3(4.0, 5.0, 6.0)
+
+печатать("a =", a)
+печатать("b =", b)
+печатать("a + b =", math3d.vec3_add(a, b))
+печатать("dist(a,b) =", math3d.vec3_distance(a, b))

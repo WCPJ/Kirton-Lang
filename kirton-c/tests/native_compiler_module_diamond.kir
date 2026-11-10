@@ -1,0 +1,4 @@
+импорт "native_compiler_module_left" как слева
+импорт "native_compiler_module_right" как справа
+печатать(слева.получить())
+печатать(справа.получить())

@@ -1,0 +1,4 @@
+модуль release_integration_dependency
+функция начальное_смещение() {
+    вернуть 10
+}

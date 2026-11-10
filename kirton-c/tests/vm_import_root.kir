@@ -1,0 +1,7 @@
+импорт "vm_import_state" как module_ref из "tests"
+функция next()
+    вернуть module_ref.next()
+конец
+функция read()
+    вернуть module_ref.read()
+конец

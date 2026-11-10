@@ -1,0 +1,35 @@
+функция main()
+    пусть результат = процесс_выполнить("cmd.exe /d /c echo KIRTON_PROCESS_OK", "", 5000)
+    если результат.код == 0 и строка_найти(результат.stdout, "KIRTON_PROCESS_OK") >= 0 то
+        печатать("PROCESS_RUN_OK")
+    иначе
+        печатать("PROCESS_RUN_FAIL")
+    конец
+
+    пусть алиас = процесс_запуск("cmd.exe /d /c echo KIRTON_PROCESS_ALIAS_OK", "", 5000)
+    если алиас.код == 0 и строка_найти(алиас.stdout, "KIRTON_PROCESS_ALIAS_OK") >= 0 то
+        печатать("PROCESS_ALIAS_OK")
+    иначе
+        печатать("PROCESS_ALIAS_FAIL")
+    конец
+
+    если процесс_запуск_и_ждать("cmd.exe /d /c exit 7") == 7 то
+        печатать("PROCESS_EXIT_CODE_OK")
+    иначе
+        печатать("PROCESS_EXIT_CODE_FAIL")
+    конец
+
+    пусть совместимый_алиас = process_выполнить("cmd.exe /d /c echo KIRTON_PROCESS_COMPAT_OK", "", 5000)
+    если совместимый_алиас.код == 0 и строка_найти(совместимый_алиас.stdout, "KIRTON_PROCESS_COMPAT_OK") >= 0 то
+        печатать("PROCESS_COMPAT_ALIAS_OK")
+    иначе
+        печатать("PROCESS_COMPAT_ALIAS_FAIL")
+    конец
+
+    пусть неверная_команда = exec(42)
+    если неверная_команда.код == -1 и неверная_команда.ошибка != пусто то
+        печатать("PROCESS_INVALID_OK")
+    иначе
+        печатать("PROCESS_INVALID_FAIL")
+    конец
+конец

@@ -1,0 +1,10 @@
+пусть retained = {"self": пусто, "value": 91}
+retained["self"] = retained
+функция main() {
+  пусть i = 0
+  пока i < 12000 {
+    пусть garbage = [i, "x" + "y", {"nested": [i]}]
+    i = i + 1
+  }
+  печатать(i, retained["self"]["value"])
+}

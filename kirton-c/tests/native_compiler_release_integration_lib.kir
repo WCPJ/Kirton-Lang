@@ -1,0 +1,11 @@
+модуль release_integration_lib
+импорт "native_compiler_release_integration_dependency" как зависимость
+
+функция создать_счетчик(start) {
+    пусть total = start + зависимость.начальное_смещение()
+    функция next(step) {
+        total = total + step
+        вернуть total
+    }
+    вернуть next
+}

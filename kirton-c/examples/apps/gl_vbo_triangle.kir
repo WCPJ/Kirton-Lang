@@ -1,0 +1,53 @@
+пусть W = 800
+пусть H = 600
+
+если gl.create_window(W, H, "GL VBO demo") == ложь {
+    печатать("Не удалось создать окно OpenGL")
+    возврат
+}
+gl.viewport(W, H)
+
+пусть vs = "#version 330 core\nlayout(location=0) in vec3 aPos;\nlayout(location=1) in vec4 aCol;\nlayout(location=2) in vec2 aUV;\nout vec4 vCol;\nout vec2 vUV;\nuniform float uAngle;\nuniform float uAspect;\nvoid main(){\n    float cz = cos(uAngle);\n    float sz = sin(uAngle);\n    float cy = cos(uAngle * 0.6);\n    float sy = sin(uAngle * 0.6);\n    mat3 rz = mat3(cz,-sz,0.0, sz,cz,0.0, 0.0,0.0,1.0);\n    mat3 ry = mat3(cy,0.0,sy, 0.0,1.0,0.0, -sy,0.0,cy);\n    vec3 p = ry * (rz * aPos);\n    p.z -= 2.2; // push back a bit\n    float f = 1.0 / tan(radians(60.0) * 0.5);\n    vec4 pos;\n    pos.x = p.x * f / uAspect;\n    pos.y = p.y * f;\n    pos.z = p.z;\n    pos.w = -p.z; // simple perspective divide\n    gl_Position = pos;\n    vCol = aCol;\n    vUV = aUV;\n}\n"
+
+пусть fs = "#version 330 core\nin vec4 vCol;\nin vec2 vUV;\nout vec4 oColor;\nuniform sampler2D uTex;\nvoid main(){\n    vec4 tex = texture(uTex, vUV);\n    oColor = tex * vCol;\n}\n"
+
+пусть prog = gl.create_shader_program(vs, fs)
+если prog == 0 {
+    печатать("Шейдеры не поддерживаются (нужен OpenGL 3.3 core). Попробуйте обновить драйвер или используйте gl_triangle.kir.")
+    возврат
+}
+gl.set_uniform1f(prog, "uAspect", W / H)
+
+пусть verts = [
+    // position         // color                 // uv
+    0.0,  0.7, 0.0,     1.0, 1.0, 1.0, 1.0,     0.5, 0.0,
+   -0.7, -0.7, 0.0,     1.0, 0.3, 0.3, 1.0,     0.0, 1.0,
+    0.7, -0.7, 0.0,     0.3, 1.0, 0.3, 1.0,     1.0, 1.0
+]
+
+пусть indices = [
+    0, 1, 2
+]
+
+пусть vb = gl.create_vertex_buffer(verts, 36, 3)
+пусть ib = gl.create_index_buffer(indices, 3)
+если vb == 0 или ib == 0 {
+    печатать("Ошибка буферов")
+    возврат
+}
+
+пусть tex = gl.load_texture("examples/assets/checker.png")
+если tex == 0 {
+    печатать("Не удалось загрузить текстуру")
+    возврат
+}
+gl.bind_texture(tex)
+
+пусть t = 0.0
+пока gl.poll() {
+    gl.clear(0.05, 0.07, 0.1, 1.0)
+    gl.set_uniform1f(prog, "uAngle", t)
+    gl.draw_indexed(vb, ib, prog, gl.mode_triangles())
+    gl.swap()
+    t = t + 0.01
+}

@@ -1,0 +1,3 @@
+пусть строка = "Kirton"
+печатать(строка[-1])
+печатать("STRING_INDEX_NEGATIVE_FAIL_AFTER")

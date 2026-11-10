@@ -1,0 +1,3 @@
+// Runtime error must stop the script and point to the real source location.
+печатать(не_объявлена)
+печатать("ПОСЛЕ_ОШИБКИ")

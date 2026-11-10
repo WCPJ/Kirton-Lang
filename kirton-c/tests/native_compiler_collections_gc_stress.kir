@@ -1,0 +1,10 @@
+пусть state = {"sum": 0, "current": ["начало", 100000000000000000000000000000000]}
+пусть stable = state["current"]
+пусть i = 0
+пока i < 2000 {
+    state["current"] = [i, {"count": i + 1}, "тест 🐢"]
+    state["sum"] = state["sum"] + 1
+    i = i + 1
+}
+печатать(state["sum"], state["current"][0], state["current"][1]["count"])
+печатать(stable[0], stable[1])

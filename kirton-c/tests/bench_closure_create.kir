@@ -1,0 +1,16 @@
+функция make(x) {
+  функция get() {
+    вернуть x
+  }
+  вернуть get
+}
+функция main() {
+  пусть i = 0
+  пусть total = 0
+  пока i < 5000 {
+    пусть current = make(i)
+    total = total + current()
+    i = i + 1
+  }
+  печатать(total)
+}

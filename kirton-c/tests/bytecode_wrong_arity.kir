@@ -1,0 +1,9 @@
+функция use_one(x) {
+  вернуть x
+}
+функция side_effect() {
+  печатать("ARG_EVALUATED")
+  вернуть 1
+}
+use_one(side_effect(), side_effect())
+печатать("AFTER_ARITY_ERROR")

@@ -1,0 +1,24 @@
+  пусть values = [1, 2, 3, 4]
+  пусть seen = 0
+  для каждого item в [0, 1, 2, 3] {
+    если item == 1 {
+      values[2] = 30
+      продолжить
+    }
+    если item == 3 {
+      прервать
+    }
+    seen = seen * 100 + values[item]
+  }
+  пусть n = 0
+  пока n < 2500 {
+    для каждого x в [1, 2] {
+      пусть temporary = [x, {"iteration": n}]
+      если x == 1 {
+        продолжить
+      }
+      values[0] = values[0] + temporary[1]["iteration"] % 2
+    }
+    n = n + 1
+  }
+печатать(seen, values[0], values[2], n)

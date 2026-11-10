@@ -1,0 +1,11 @@
+функция main() {
+  пусть values = [0, 0, 0]
+  пусть counts = {"n": 0}
+  пусть i = 0
+  пока i < 5000 {
+    values[1] = values[1] + i % 3
+    counts["n"] = counts["n"] + 1
+    i = i + 1
+  }
+  печатать(values[1], counts["n"])
+}

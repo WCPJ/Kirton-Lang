@@ -1,0 +1,4 @@
+функция main() {
+  импорт внешний
+  внешний.загрузить("should-not-load-without-opt-in")
+}

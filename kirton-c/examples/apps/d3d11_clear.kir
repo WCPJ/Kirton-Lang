@@ -1,0 +1,22 @@
+// Minimal Direct3D11 demo: clear screen with changing color.
+пусть ширина = 800
+пусть высота = 600
+
+если d3d11.create_window(ширина, высота, "D3D11 demo") == ложь {
+    печатать("Failed to create D3D11 window")
+    возврат
+}
+
+пусть t = 0.0
+
+пока d3d11.poll() {
+    пусть r = t
+    пусть g = 0.2
+    пусть b = 0.35
+    d3d11.clear(r, g, b, 1.0)
+    d3d11.present(1)
+    t = t + 0.01
+    если t > 1.0 {
+        t = 0.0
+    }
+}

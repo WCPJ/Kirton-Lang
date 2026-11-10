@@ -1,0 +1,27 @@
+структура Node {
+  name: строка
+  items: список
+}
+перечисление State {
+  fresh
+  used
+}
+функция mutate(node, state) {
+  node.name = "after"
+  node.items[1] = state
+  вернуть node
+}
+функция identity(node) {
+  вернуть node
+}
+пусть state = State.used
+пусть nodes = [пусто, state]
+пусть root = Node(name: "before", items: nodes)
+nodes[0] = root
+пусть same = mutate(root, state)
+если same == root и identity(root) == root и root.name == "after" и
+   nodes[0] == root и nodes[1] == State.used и root.items[1] == State.used то
+  печатать("STRUCT_CYCLE_ENUM_OK")
+иначе
+  печатать("STRUCT_CYCLE_ENUM_FAIL")
+конец

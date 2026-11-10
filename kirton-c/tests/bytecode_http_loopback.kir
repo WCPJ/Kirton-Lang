@@ -1,0 +1,9 @@
+функция main()
+    пусть адрес = окружение("KIRTON_TEST_HTTP_URL")
+    http_test_assert(http_получить(адрес, 2000))
+    http_test_assert(http_запрос("POST", адрес, пусто, "payload", 2000))
+    http_test_assert_status(веб_получить(адрес + "/missing", 2000), 404, "missing")
+    http_test_assert_error(http_получить(42, 2000))
+    http_test_assert_error(http_получить("not a URL", 2000))
+    http_test_assert_error(http_получить(окружение("KIRTON_TEST_HTTP_CLOSED_URL"), 250))
+конец

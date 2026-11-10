@@ -1,0 +1,24 @@
+импорт "native_compiler_release_integration_lib" как библиотека
+
+пусть counter = библиотека.создать_счетчик(0)
+пусть values = [1, 2, 3]
+пусть stats = {"sum": 0, "finally": ложь}
+пусть i = 0
+пока i < 1200 {
+    пусть index = i % 3
+    values[index] = values[index] + 1
+    stats["sum"] = stats["sum"] + counter(2)
+    i = i + 1
+}
+stats["big"] = 9223372036854775807 + 1
+stats["tag"] = "Киртон"
+попробовать {
+    пусть failed = 1 / 0
+    печатать("UNEXPECTED")
+} перехватить error {
+    печатать("CAUGHT")
+} всегда {
+    stats["finally"] = истина
+}
+печатать(values[0], values[1], values[2])
+печатать(stats["sum"], stats["finally"], stats["big"], stats["tag"])

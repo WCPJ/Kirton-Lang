@@ -1,0 +1,13 @@
+* text=auto eol=lf
+*.bmp binary
+*.png binary
+*.wav binary
+*.zip binary
+*.tar binary
+*.tar.gz binary
+*.tgz binary
+*.exe binary
+*.dll binary
+*.lib binary
+*.a binary
+*.so binary

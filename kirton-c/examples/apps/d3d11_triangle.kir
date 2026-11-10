@@ -1,0 +1,79 @@
+// Простой пример: текстурированный треугольник (D3D11, draw_indexed).
+// Ожидаемый вид: checker-текстура на треугольнике на тёмно-синем фоне.
+
+пусть W = 800
+пусть H = 600
+
+если d3d11.create_window(W, H, "D3D11 textured triangle") == ложь {
+    возврат 0
+}
+
+// Пока без глубины и куллинга, просто 2D-треугольник в NDC
+d3d11.enable_depth(ложь)
+d3d11.enable_cull(ложь)
+
+// --- HLSL (без матриц, просто позиция → экран) ---
+пусть vs =
+    "struct VSIn{float3 pos:POSITION;float4 col:COLOR;float2 uv:TEXCOORD0;};\n"
+    + "struct VSOut{float4 pos:SV_Position;float4 col:COLOR;float2 uv:TEXCOORD0;};\n"
+    + "VSOut main(VSIn i){VSOut o;o.pos=float4(i.pos,1.0);o.col=i.col;o.uv=i.uv;return o;}\n"
+
+пусть ps =
+    "Texture2D tex0:register(t0);SamplerState smp0:register(s0);\n"
+    + "struct PSIn{float4 pos:SV_Position;float4 col:COLOR;float2 uv:TEXCOORD0;};\n"
+    + "float4 main(PSIn i):SV_Target{float4 t=tex0.Sample(smp0,i.uv*4.0);return t*i.col;}\n"
+
+пусть shader = d3d11.create_shader_pair(vs, ps)
+если shader == 0 {
+    возврат 0
+}
+
+// --- Геометрия (позиция, цвет, uv) ---
+// Формат: float3 pos, float4 color, float2 uv  →  9 чисел на вершину, stride = 9 * 4 = 36 байт
+пусть vb_data = []
+
+// Вершина 0
+vb_data = vb_data + [0.0] + [0.7] + [0.0]   // pos
+vb_data = vb_data + [1.0] + [1.0] + [1.0] + [1.0]   // color
+vb_data = vb_data + [0.5] + [0.0]           // uv
+
+// Вершина 1
+vb_data = vb_data + [-0.7] + [-0.7] + [0.0]
+vb_data = vb_data + [1.0] + [1.0] + [1.0] + [1.0]
+vb_data = vb_data + [0.0] + [1.0]
+
+// Вершина 2
+vb_data = vb_data + [0.7] + [-0.7] + [0.0]
+vb_data = vb_data + [1.0] + [1.0] + [1.0] + [1.0]
+vb_data = vb_data + [1.0] + [1.0]
+
+// Создаём VB: stride = 36 байт, 3 вершины
+пусть vb = d3d11.create_vertex_buffer(vb_data, 36, 3)
+если vb == 0 {
+    возврат 0
+}
+
+// Индексы – тоже через конкатенацию
+пусть ib_data = []
+ib_data = ib_data + [0]
+ib_data = ib_data + [1]
+ib_data = ib_data + [2]
+
+пусть ib = d3d11.create_index_buffer(ib_data, 3)
+если ib == 0 {
+    возврат 0
+}
+
+// Текстура
+пусть tex = d3d11.load_texture("examples/assets/checker.png")
+если tex == 0 {
+    возврат 0
+}
+d3d11.bind_texture(tex)
+
+// Главный цикл
+пока d3d11.poll() {
+    d3d11.clear(0.02, 0.05, 0.12, 1.0)   // тёмно-синий фон
+    d3d11.draw_indexed(vb, ib, shader, 0)
+    d3d11.present(1)
+}

@@ -1,0 +1,18 @@
+импорт os
+
+функция main()
+    пусть папка = os.текущая_папка()
+    если папка != "" то
+        печатать("OS_CWD_OK")
+    иначе
+        печатать("OS_CWD_MISSING")
+    конец
+
+    пусть ключ = "KIRTON_BYTECODE_OS_DIFF_VALUE"
+    пусть задано = os.установить_окружение(ключ, "ast-bytecode-check")
+    если задано и os.окружение(ключ) == "ast-bytecode-check" то
+        печатать("OS_ENV_SET_GET_OK")
+    иначе
+        печатать("OS_ENV_SET_GET_FAILED")
+    конец
+конец

@@ -1,0 +1,77 @@
+// Pong на публичном Compatibility API. Игровая логика: движение мяча, отскоки и счёт.
+пусть W = 800
+пусть H = 600
+если gl.create_window(W, H, "Kirton Pong - OpenGL Compatibility") == ложь {
+    печатать("Не удалось создать OpenGL окно")
+    возврат
+}
+пусть px = 0.0
+пусть py = 0.0
+пусть bx = 0.0
+пусть by = 0.0
+пусть vx = 0.012
+пусть vy = 0.009
+пусть p1 = 0
+пусть p2 = 0
+пока gl.poll() {
+    если gl.key_down(87) {
+        px = px + 0.02
+    }
+    если gl.key_down(83) {
+        px = px - 0.02
+    }
+    если gl.key_down(38) {
+        py = py + 0.02
+    }
+    если gl.key_down(40) {
+        py = py - 0.02
+    }
+    bx = bx + vx
+    by = by + vy
+    если by > 0.95 или by < -0.95 {
+        vy = -vy
+    }
+    если bx > 0.78 и by < py + 0.20 и by > py - 0.20 {
+        vx = -vx
+    }
+    если bx > 0.98 {
+        p1 = p1 + 1
+        bx = 0.0
+        by = 0.0
+        vx = -0.012
+    }
+    если bx < -0.92 {
+        p2 = p2 + 1
+        bx = 0.0
+        by = 0.0
+        vx = 0.012
+    }
+    если bx < -0.78 и by < px + 0.20 и by > px - 0.20 {
+        vx = -vx
+    }
+    gl.clear(0.02, 0.03, 0.06, 1.0)
+    gl.begin(gl.mode_quads())
+        gl.color3(0.2, 0.9, 1.0)
+        gl.vertex3(-0.92, px-0.20, 0.0)
+        gl.vertex3(-0.84, px-0.20, 0.0)
+        gl.vertex3(-0.84, px+0.20, 0.0)
+        gl.vertex3(-0.92, px+0.20, 0.0)
+        gl.color3(1.0, 0.7, 0.2)
+        gl.vertex3(0.84, py-0.20, 0.0)
+        gl.vertex3(0.92, py-0.20, 0.0)
+        gl.vertex3(0.92, py+0.20, 0.0)
+        gl.vertex3(0.84, py+0.20, 0.0)
+        gl.color3(1.0, 0.3, 0.3)
+        gl.vertex3(bx-0.025, by-0.025, 0.0)
+        gl.vertex3(bx+0.025, by-0.025, 0.0)
+        gl.vertex3(bx+0.025, by+0.025, 0.0)
+        gl.vertex3(bx-0.025, by+0.025, 0.0)
+        gl.color3(0.8, 0.8, 0.9)
+        gl.vertex3(-0.005, -1.0, 0.0)
+        gl.vertex3(0.005, -1.0, 0.0)
+        gl.vertex3(0.005, 1.0, 0.0)
+        gl.vertex3(-0.005, 1.0, 0.0)
+    gl.end()
+    gl.swap()
+}
+печатать("Счёт:", p1, "-", p2)

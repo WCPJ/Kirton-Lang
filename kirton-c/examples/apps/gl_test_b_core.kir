@@ -1,0 +1,47 @@
+// Тест B: три квадрата OpenGL 3.3 Core, VBO, IBO, GLSL и uniform.
+пусть W = 900
+пусть H = 600
+если gl.create_window_core(W, H, "Kirton GL Test B - Core 3.3") == ложь {
+    печатать("Не удалось создать OpenGL 3.3 Core окно. Смотрите диагностику в stderr.")
+    возврат
+}
+
+gl.viewport(W, H)
+пусть vs = "#version 330 core\nlayout(location=0) in vec3 aPos;\nlayout(location=1) in vec4 aCol;\nlayout(location=2) in vec2 aUV;\nout vec4 vCol;\nuniform float uOffset;\nvoid main(){ gl_Position=vec4(aPos.x+uOffset,aPos.y,aPos.z,1.0); vCol=aCol; }\n"
+пусть fs = "#version 330 core\nin vec4 vCol;\nout vec4 oColor;\nvoid main(){ oColor=vCol; }\n"
+пусть prog = gl.create_shader_program(vs, fs)
+если prog == 0 {
+    печатать("Ошибка компиляции/линковки GLSL")
+    возврат
+}
+
+пусть verts = [
+    -0.90,-0.30,0.0, 1.0,0.1,0.1,1.0, 0.0,0.0,
+    -0.50,-0.30,0.0, 1.0,0.1,0.1,1.0, 0.0,0.0,
+    -0.50, 0.30,0.0, 1.0,0.1,0.1,1.0, 0.0,0.0,
+    -0.90, 0.30,0.0, 1.0,0.1,0.1,1.0, 0.0,0.0,
+    -0.20,-0.30,0.0, 0.1,1.0,0.2,1.0, 0.0,0.0,
+     0.20,-0.30,0.0, 0.1,1.0,0.2,1.0, 0.0,0.0,
+     0.20, 0.30,0.0, 0.1,1.0,0.2,1.0, 0.0,0.0,
+    -0.20, 0.30,0.0, 0.1,1.0,0.2,1.0, 0.0,0.0,
+     0.50,-0.30,0.0, 0.2,0.4,1.0,1.0, 0.0,0.0,
+     0.90,-0.30,0.0, 0.2,0.4,1.0,1.0, 0.0,0.0,
+     0.90, 0.30,0.0, 0.2,0.4,1.0,1.0, 0.0,0.0,
+     0.50, 0.30,0.0, 0.2,0.4,1.0,1.0, 0.0,0.0
+]
+пусть indices = [0,1,2, 0,2,3, 4,5,6, 4,6,7, 8,9,10, 8,10,11]
+пусть vb = gl.create_vertex_buffer(verts, 36, 12)
+пусть ib = gl.create_index_buffer(indices, 18)
+если vb == 0 или ib == 0 {
+    печатать("Не удалось создать VBO/IBO")
+    gl.destroy_shader_program(prog)
+    gl.destroy()
+    возврат
+}
+
+пока gl.poll() {
+    gl.clear(0.06, 0.07, 0.10, 1.0)
+    gl.set_uniform1f(prog, "uOffset", 0.0)
+    gl.draw_indexed(vb, ib, prog, gl.mode_triangles())
+    gl.swap()
+}

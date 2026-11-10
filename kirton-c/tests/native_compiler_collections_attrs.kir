@@ -1,0 +1,8 @@
+пусть d = {"name": "начало", "count": 2}
+печатать(d.name, d.count, d.missing)
+d.name = "новое"
+d.count = 5
+печатать(d.name, d.count)
+пусть outer = {"child": d}
+outer.child.name = "финал"
+печатать(outer.child.name, d.name, d["name"])

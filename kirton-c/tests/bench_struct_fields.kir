@@ -1,0 +1,12 @@
+структура Counter {
+  value: целое
+}
+функция main() {
+  пусть counter = Counter(value: 0)
+  пусть i = 0
+  пока i < 30000 {
+    counter.value = counter.value + 1
+    i = i + 1
+  }
+  печатать(counter.value)
+}

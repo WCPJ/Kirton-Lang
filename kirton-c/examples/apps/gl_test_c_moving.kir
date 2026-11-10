@@ -1,0 +1,39 @@
+// Тест C: движущаяся цветная прямоугольная площадка в игровом цикле (Core 3.3).
+пусть W = 800
+пусть H = 600
+если gl.create_window_core(W, H, "Kirton GL Test C - Moving Rectangle") == ложь {
+    печатать("Не удалось создать OpenGL 3.3 Core окно")
+    возврат
+}
+пусть vs = "#version 330 core\nlayout(location=0) in vec3 aPos;\nlayout(location=1) in vec4 aCol;\nlayout(location=2) in vec2 aUV;\nout vec4 vCol;\nuniform float uOffset;\nvoid main(){ gl_Position=vec4(aPos.x+uOffset,aPos.y,aPos.z,1.0); vCol=aCol; }\n"
+пусть fs = "#version 330 core\nin vec4 vCol;\nout vec4 oColor;\nvoid main(){ oColor=vCol; }\n"
+пусть prog = gl.create_shader_program(vs, fs)
+если prog == 0 {
+    печатать("Ошибка GLSL")
+    возврат
+}
+пусть verts = [
+    -0.10,-0.10,0.0, 1.0,0.8,0.1,1.0, 0.0,0.0,
+     0.10,-0.10,0.0, 1.0,0.8,0.1,1.0, 0.0,0.0,
+     0.10, 0.10,0.0, 1.0,0.8,0.1,1.0, 0.0,0.0,
+    -0.10, 0.10,0.0, 1.0,0.8,0.1,1.0, 0.0,0.0
+]
+пусть vb = gl.create_vertex_buffer(verts, 36, 4)
+пусть ib = gl.create_index_buffer([0,1,2,0,2,3], 6)
+пусть x = -0.8
+пусть dx = 0.008
+пока gl.poll() {
+    x = x + dx
+    если x > 0.8 {
+        x = 0.8
+        dx = -dx
+    }
+    если x < -0.8 {
+        x = -0.8
+        dx = -dx
+    }
+    gl.clear(0.05, 0.07, 0.11, 1.0)
+    gl.set_uniform1f(prog, "uOffset", x)
+    gl.draw_indexed(vb, ib, prog, gl.mode_triangles())
+    gl.swap()
+}

@@ -1,0 +1,63 @@
+name: Build and test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    name: Windows x64 (MSVC)
+    runs-on: windows-2022
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Locate LLVM/Clang
+        shell: pwsh
+        run: |
+          $clangCommand = Get-Command clang.exe -ErrorAction SilentlyContinue
+          if ($null -eq $clangCommand) {
+            $clangDirectory = Join-Path $env:ProgramFiles 'LLVM\bin'
+            $clangPath = Join-Path $clangDirectory 'clang.exe'
+            if (-not (Test-Path -LiteralPath $clangPath)) {
+              throw 'Clang is required for the Native compiler test suite.'
+            }
+            Add-Content -LiteralPath $env:GITHUB_PATH -Value $clangDirectory
+          } else {
+            $clangPath = $clangCommand.Source
+          }
+          & $clangPath --version
+
+      - name: Configure
+        run: cmake -S kirton-c -B build -A x64 -DBUILD_TESTING=ON
+
+      - name: Build
+        run: cmake --build build --config Release --parallel 2
+
+      - name: Test
+        run: ctest --test-dir build -C Release --output-on-failure --parallel 2
+
+  linux:
+    name: Linux x86-64 (GCC)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install build and Native-test toolchains
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends build-essential cmake ninja-build clang
+
+      - name: Configure
+        run: cmake -S kirton-c -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON
+
+      - name: Build
+        run: cmake --build build --parallel 2
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure --parallel 2

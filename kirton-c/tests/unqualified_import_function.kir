@@ -1,0 +1,3 @@
+импорт "module_scope_a" как первый из "tests"
+вычислить()
+печатать("UNQUALIFIED_IMPORTED_FUNCTION_FAIL_AFTER")

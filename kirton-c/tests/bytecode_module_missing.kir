@@ -1,0 +1,7 @@
+попробовать {
+    импорт "no_such_module_for_bytecode" из "bytecode_modules"
+} перехватить ошибка {
+    печатать(ошибка.код, ошибка.сообщение)
+} всегда {
+    печатать("MODULE_MISSING_FINALLY")
+}

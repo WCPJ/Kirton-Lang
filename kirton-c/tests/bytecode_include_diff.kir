@@ -1,0 +1,2 @@
+включить "bytecode_includes/defs.kir"
+печатать(умножить(7))

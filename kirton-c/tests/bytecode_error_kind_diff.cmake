@@ -1,0 +1,8 @@
+execute_process(COMMAND "${KIRTON}" "${SOURCE}" RESULT_VARIABLE ast_rc OUTPUT_VARIABLE ast_out ERROR_VARIABLE ast_err)
+execute_process(COMMAND "${KIRTON}" --bytecode "${SOURCE}" RESULT_VARIABLE bc_rc OUTPUT_VARIABLE bc_out ERROR_VARIABLE bc_err)
+if(ast_rc EQUAL 0 OR bc_rc EQUAL 0 OR NOT ast_out STREQUAL bc_out)
+  message(FATAL_ERROR "Expected the same runtime failure (AST rc=${ast_rc}, bytecode rc=${bc_rc}, AST output=${ast_out}, bytecode output=${bc_out})")
+endif()
+if(DEFINED ERROR_PATTERN AND (NOT ast_err MATCHES "${ERROR_PATTERN}" OR NOT bc_err MATCHES "${ERROR_PATTERN}"))
+  message(FATAL_ERROR "Error categories differ (expected ${ERROR_PATTERN}; AST=${ast_err}; bytecode=${bc_err})")
+endif()

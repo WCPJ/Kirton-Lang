@@ -1,0 +1,14 @@
+импорт test_resource
+пусть ресурс = test_resource.создать()
+
+если не ресурс то
+    печатать("TRUTHINESS_RESOURCE_FAIL: live resource")
+конец
+
+ресурсы.закрыть(ресурс)
+
+если не ресурс то
+    печатать("TRUTHINESS_RESOURCE_FAIL: closed resource")
+конец
+
+печатать("TRUTHINESS_RESOURCE_OK")

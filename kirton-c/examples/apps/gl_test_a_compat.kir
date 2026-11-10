@@ -1,0 +1,29 @@
+// Тест A: три цветных квадрата через публичный Compatibility OpenGL API.
+пусть W = 800
+пусть H = 600
+если gl.create_window(W, H, "Kirton GL Test A - Compatibility") == ложь {
+    печатать("Не удалось создать compatibility OpenGL окно")
+    возврат
+}
+
+пока gl.poll() {
+    gl.clear(0.08, 0.09, 0.12, 1.0)
+    gl.begin(gl.mode_quads())
+        gl.color3(1.0, 0.1, 0.1)
+        gl.vertex3(-0.9, 0.2, 0.0)
+        gl.vertex3(-0.3, 0.2, 0.0)
+        gl.vertex3(-0.3, 0.8, 0.0)
+        gl.vertex3(-0.9, 0.8, 0.0)
+        gl.color3(0.1, 1.0, 0.2)
+        gl.vertex3(-0.3, 0.2, 0.0)
+        gl.vertex3(0.3, 0.2, 0.0)
+        gl.vertex3(0.3, 0.8, 0.0)
+        gl.vertex3(-0.3, 0.8, 0.0)
+        gl.color3(0.2, 0.4, 1.0)
+        gl.vertex3(0.3, 0.2, 0.0)
+        gl.vertex3(0.9, 0.2, 0.0)
+        gl.vertex3(0.9, 0.8, 0.0)
+        gl.vertex3(0.3, 0.8, 0.0)
+    gl.end()
+    gl.swap()
+}

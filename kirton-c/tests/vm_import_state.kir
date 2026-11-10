@@ -1,0 +1,8 @@
+пусть state = 0
+функция next()
+    state = state + 1
+    вернуть state
+конец
+функция read()
+    вернуть state
+конец

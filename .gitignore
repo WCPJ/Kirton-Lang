@@ -1,0 +1,58 @@
+# Local Codex and task state
+.omx/
+.codex/
+/.local-release-archive/
+
+# CMake and native build output
+**/build*/
+**/CMakeFiles/
+**/.vs/
+**/.cache/
+**/CMakeCache.txt
+**/cmake_install.cmake
+**/compile_commands.json
+**/Testing/
+**/*.obj
+**/*.o
+**/*.pdb
+**/*.ilk
+**/*.lib
+**/*.dll
+**/*.so
+**/*.a
+**/*.exe
+**/*.dylib
+**/*.class
+**/*.dmp
+**/*.core
+**/*.gcda
+**/*.gcno
+**/__pycache__/
+**/.pytest_cache/
+
+# Generated packages, archives, logs, and local release staging
+**/dist/
+**/*.log
+**/*.tar
+**/*.tar.gz
+**/*.tgz
+**/*.zip
+**/*.7z
+/release-artifacts/
+/release/1.3.0/
+/release/1.3.0-rc/
+/kirton-c/Расположение.png
+/kirton-c/test.txt
+
+# Local compiler development reports (kept out of the public source tree)
+/KIRTON_1_2_*.md
+/KIRTON_NATIVE_*.md
+/KIRTON_OOM_CONTRACT.md
+
+# Editor and operating-system files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*.swo
+*~

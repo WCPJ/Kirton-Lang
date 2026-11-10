@@ -1,0 +1,33 @@
+if(NOT DEFINED KIRTON OR NOT DEFINED SOURCE)
+  message(FATAL_ERROR "KIRTON and SOURCE are required")
+endif()
+if(CMAKE_HOST_WIN32)
+  set(native_suffix ".exe")
+else()
+  set(native_suffix "")
+endif()
+foreach(mode IN ITEMS ast bytecode)
+  if(mode STREQUAL "bytecode")
+    execute_process(COMMAND "${KIRTON}" --bytecode "${SOURCE}"
+      RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 20)
+  else()
+    execute_process(COMMAND "${KIRTON}" "${SOURCE}"
+      RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 20)
+  endif()
+  string(STRIP "${output}" output)
+  if(NOT "${result}" STREQUAL "0" OR NOT output STREQUAL "3" OR
+     NOT "${error}" STREQUAL "")
+    message(FATAL_ERROR "${mode} nested closure behavior mismatch: exit=${result}, stdout=[${output}], stderr=[${error}]")
+  endif()
+endforeach()
+set(native_exe "${CMAKE_CURRENT_BINARY_DIR}/native_nested_closure_reject${native_suffix}")
+file(REMOVE "${native_exe}")
+execute_process(COMMAND "${KIRTON}" --native "${SOURCE}" -o "${native_exe}"
+  RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE error TIMEOUT 20)
+if("${result}" STREQUAL "0" OR NOT "${output}" STREQUAL "" OR
+   NOT "${error}" MATCHES "nested functions and closures are not supported")
+  message(FATAL_ERROR "native did not clearly reject closure capture: exit=${result}, stdout=[${output}], stderr=[${error}]")
+endif()
+if(EXISTS "${native_exe}")
+  message(FATAL_ERROR "native closure rejection unexpectedly left an executable")
+endif()

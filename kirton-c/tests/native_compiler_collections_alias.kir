@@ -1,0 +1,14 @@
+пусть items = [1, 2, 3]
+пусть alias = items
+alias[1] = 9223372036854775808
+пусть mapping = {"list": items, "tag": "начало"}
+mapping["list"][0] = "изменено"
+пусть alias_map = mapping
+alias_map["tag"] = "конец"
+печатать(items[0], items[1], items[2], mapping["tag"], alias_map["list"][0])
+пусть ring = [пусто]
+ring[0] = ring
+печатать(ring == ring[0], ring[0][0] == ring)
+пусть cycle = {"self": пусто, "payload": [1, 2]}
+cycle["self"] = cycle
+печатать(cycle["self"]["payload"][1])

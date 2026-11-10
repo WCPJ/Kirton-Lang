@@ -1,0 +1,10 @@
+пусть ticks = 0
+функция mark(x) {
+    ticks = ticks * 10 + x
+    вернуть x
+}
+пусть a = [mark(1), mark(2), mark(3)]
+пусть d = {"a": mark(4), "b": mark(5)}
+печатать(ticks)
+a[mark(6)-6] = mark(7)
+печатать(ticks, a[0], d["b"])

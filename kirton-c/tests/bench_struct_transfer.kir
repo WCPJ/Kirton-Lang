@@ -1,0 +1,16 @@
+структура Packet {
+  value: целое
+}
+функция update(packet, value) {
+  packet.value = value
+  вернуть packet
+}
+функция main() {
+  пусть i = 0
+  пусть packet = Packet(value: 0)
+  пока i < 8000 {
+    packet = update(Packet(value: i), i + 1)
+    i = i + 1
+  }
+  печатать(packet.value)
+}

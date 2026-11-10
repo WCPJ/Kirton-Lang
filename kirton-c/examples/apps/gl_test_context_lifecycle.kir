@@ -1,0 +1,47 @@
+// Проверка создания/удаления контекстов, повторного окна и отказа для ошибочного шейдера.
+пусть W = 320
+пусть H = 240
+если не gl.create_window(W, H, "Kirton GL context lifecycle - compatibility") {
+    печатать("FAIL: compatibility create_window")
+    возврат
+}
+если не gl.destroy() {
+    печатать("FAIL: compatibility destroy")
+    возврат
+}
+если не gl.create_window_core(W, H, "Kirton GL context lifecycle - core") {
+    печатать("FAIL: core create_window")
+    возврат
+}
+пусть bad = gl.create_shader_program("invalid vertex shader", "invalid fragment shader")
+если bad != 0 {
+    печатать("FAIL: invalid shaders unexpectedly linked")
+    gl.destroy_shader_program(bad)
+    gl.destroy()
+    возврат
+}
+пусть vs = "#version 330 core\nlayout(location=0) in vec3 aPos;\nlayout(location=1) in vec4 aCol;\nlayout(location=2) in vec2 aUV;\nvoid main(){gl_Position=vec4(aPos,1.0);}\n"
+пусть fs = "#version 330 core\nout vec4 oColor;\nvoid main(){oColor=vec4(1.0);}\n"
+пусть prog = gl.create_shader_program(vs, fs)
+если prog == 0 {
+    печатать("FAIL: valid shaders failed")
+    gl.destroy()
+    возврат
+}
+пусть vb = gl.create_vertex_buffer([-0.2,-0.2,0.0,1.0,0.0,0.0,1.0,0.0,0.0, 0.2,-0.2,0.0,0.0,1.0,0.0,1.0,0.0,0.0, 0.0,0.2,0.0,0.0,0.0,1.0,1.0,0.0,0.0], 36, 3)
+пусть ib = gl.create_index_buffer([0,1,2], 3)
+если vb == 0 или ib == 0 {
+    печатать("FAIL: buffer creation")
+    gl.destroy()
+    возврат
+}
+если не gl.destroy_shader_program(prog) {
+    печатать("FAIL: shader destruction")
+    gl.destroy()
+    возврат
+}
+если не gl.destroy() {
+    печатать("FAIL: core destroy")
+    возврат
+}
+печатать("GL_CONTEXT_LIFECYCLE_OK")
