@@ -43,4 +43,5 @@ jobs:
           compression-level: 0
 
       - name: Report artifact URL
-        run: echo 'Artifact: ${{ steps.upload.outputs.artifact-url }}' >> "$GITHUB_STEP_SUMMARY"
+        run: |
+          echo 'Artifact: ${{ steps.upload.outputs.artifact-url }}' >> "$GITHUB_STEP_SUMMARY"
