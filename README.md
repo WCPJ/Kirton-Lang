@@ -38,10 +38,10 @@ cd Kirton-SDK-1.3.0-linux-x86_64
 
 Сохраните в UTF-8 файл `hello.kir`:
 
-```kirton
+~~~text
 пусть имя = "мир"
 печатать("Привет, " + имя + "!")
-```
+~~~
 
 Запустите программу из папки с файлом:
 
@@ -51,9 +51,9 @@ kirton hello.kir
 
 Вывод:
 
-```text
+~~~text
 Привет, мир!
-```
+~~~
 
 Дополнительные режимы:
 
@@ -111,10 +111,10 @@ Add the extracted SDK's `bin` directory to `PATH` to run `kirton` from any direc
 
 Save this as UTF-8 text in `hello.kir`:
 
-```kirton
+~~~text
 пусть имя = "мир"
 печатать("Привет, " + имя + "!")
-```
+~~~
 
 Run it from the directory containing the file:
 
@@ -124,9 +124,9 @@ kirton hello.kir
 
 Output:
 
-```text
+~~~text
 Привет, мир!
-```
+~~~
 
 Other execution modes:
 
